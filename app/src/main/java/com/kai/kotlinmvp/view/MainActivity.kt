@@ -1,84 +1,74 @@
 package com.kai.kotlinmvp.view
 
-import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.kai.kotlinmvp.R
-import com.kai.kotlinmvp.listeners.MainActivityViewListener
-import com.kai.kotlinmvp.model.Author
-import com.kai.kotlinmvp.presenter.AuthorPresenter
-import kotlinx.android.synthetic.main.activity_main.*
+import com.kai.kotlinmvp.model.Picture
+import com.kai.kotlinmvp.presenter.GalleryPresenter
 
-class MainActivity : AppCompatActivity(),MainActivityViewListener {
-    private val mAuthorPresenter = AuthorPresenter( this )
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAuthorViewModel: AuthorViewModel
+class MainActivity : AppCompatActivity(), GalleryView.Listener,
+    GalleryPresenter.OnGalleryFetchedListener {
+
+    private lateinit var mGalleryView: GalleryView
+    private lateinit var mGalleryViewModel: GalleryViewModel
+    private lateinit var mGalleryPresenter: GalleryPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        progressBar.visibility = View.GONE
-        mRecyclerView = findViewById( R.id.recyclerView )
-        when( getResources().getConfiguration().orientation ){
-            Configuration.ORIENTATION_LANDSCAPE->{
-                mRecyclerView.layoutManager =
-                    GridLayoutManager(applicationContext, 5, LinearLayoutManager.VERTICAL, false)
-            }
-            Configuration.ORIENTATION_PORTRAIT->{
-                mRecyclerView.layoutManager =
-                    GridLayoutManager(applicationContext, 2, LinearLayoutManager.VERTICAL, false)
-            }
-        }
-        mRecyclerView.setHasFixedSize( true )
-        mAuthorViewModel = ViewModelProviders.of( this ).get( AuthorViewModel::class.java )
+
+        mGalleryView = GalleryView(layoutInflater, null)
+        mGalleryPresenter = GalleryPresenter()
+
+        mGalleryViewModel = ViewModelProviders.of(this).get(GalleryViewModel::class.java)
+
+        setContentView(mGalleryView.getRootView())
     }
 
-    override fun onResume() {
-        super.onResume()
-        if( mAuthorViewModel.mAuthorList.size  <= 0 ) {
-            mAuthorPresenter.getData()
-        }
-        else {
-            setRecyclerData( mAuthorViewModel.mAuthorList )
+    override fun onStart() {
+        super.onStart()
+
+        mGalleryPresenter.registerListener(this)
+        mGalleryView.registerListener(this)
+
+        if (isGalleryCached()) {
+            mGalleryView.bindPictures(mGalleryViewModel.mPicturesList)
+        } else {
+            mGalleryView.showProgressIndicator()
+            mGalleryPresenter.fetchGalleryDataAndNotify()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mAuthorPresenter.onDestroy()
+    override fun onStop() {
+        super.onStop()
+
+        mGalleryView.unregisterListener(this)
+        mGalleryPresenter.unregisterListener(this)
     }
 
-    override fun showProgress() {
-        progressBar.visibility = View.VISIBLE
+    override fun onPictureClicked(picture: Picture) {
+        Toast.makeText(applicationContext, "You clicked ${picture.authorName}", Toast.LENGTH_LONG)
+            .show()
     }
 
-    override fun hideProgress() {
-        progressBar.visibility = View.INVISIBLE
+    override fun onGalleryDataFetched(pictureList: MutableList<Picture>) {
+        cacheGalleryData(pictureList)
+
+        mGalleryView.bindPictures(mGalleryViewModel.mPicturesList)
+        mGalleryView.hideProgressIndicator()
     }
 
-    override fun setAuthorData(authorList: MutableList<Author>) {
-        mAuthorViewModel.mAuthorList = authorList
-        setRecyclerData( mAuthorViewModel.mAuthorList )
+    override fun onGalleryFetchFailed() {
+        Toast.makeText(applicationContext, "Could not load data", Toast.LENGTH_SHORT).show()
+        mGalleryView.hideProgressIndicator()
     }
 
-    override fun onItemClick(author: Author) {
-        Toast.makeText( applicationContext, "You clicked ${author.authorName}", Toast.LENGTH_LONG ).show()
+    private fun cacheGalleryData(pictureList: MutableList<Picture>) {
+        mGalleryViewModel.mPicturesList = pictureList
     }
 
-    override fun showError() {
-        Toast.makeText( applicationContext, "Could not load data", Toast.LENGTH_SHORT ).show()
+    private fun isGalleryCached(): Boolean {
+        return mGalleryViewModel.mPicturesList.size > 0
     }
 
-    private fun setRecyclerData( authorList: MutableList<Author> )
-    {
-        mRecyclerView.adapter = AuthorListAdapter(authorList) {
-            mAuthorPresenter.onItemClick(it)
-        }
-    }
 }

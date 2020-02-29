@@ -3,11 +3,11 @@ package com.kai.kotlinmvp.model
 import com.kai.kotlinmvp.helper.NetworkHelper
 import org.json.JSONArray
 
-class AuthorSDK
+class PictureSDK
 {
-    fun getAuthorList(): MutableList<Author>
+    fun getPictureList(): MutableList<Picture>
     {
-        val list = mutableListOf<Author>()
+        val list = mutableListOf<Picture>()
         val jsonString = NetworkHelper.getJsonStringData( "https://picsum.photos/list" )
         if( jsonString.startsWith("Error") )
         {
@@ -19,7 +19,7 @@ class AuthorSDK
             val authorData = jsonArray.getJSONObject( i )
             val authorId = authorData.getInt("id")
             val authorName = authorData.getString( "author" )
-            val author = Author(authorId, authorName)
+            val author = Picture(authorId, authorName)
             list.add( author )
         }
         return list
