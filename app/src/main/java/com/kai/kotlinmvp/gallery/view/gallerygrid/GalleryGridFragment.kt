@@ -1,42 +1,49 @@
-package com.kai.kotlinmvp.view.gallerygrid
+package com.kai.kotlinmvp.gallery.view.gallerygrid
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.kai.kotlinmvp.gallery.GalleryUseCase
 import com.kai.kotlinmvp.gallery.model.GallerySDK
+import com.kai.kotlinmvp.gallery.model.GalleryViewModel
 import com.kai.kotlinmvp.gallery.model.Picture
 
-class GalleryGridActivity : AppCompatActivity(), GalleryView.Listener,
+class GalleryGridFragment : Fragment(), GalleryGridView.Listener,
     GalleryUseCase.OnGalleryFetchedListener {
 
-    private lateinit var mGalleryView: GalleryView
+    private lateinit var mGalleryGridView: GalleryGridView
     private lateinit var mGalleryViewModel: GalleryViewModel
     private lateinit var mGalleryUseCase: GalleryUseCase
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        mGalleryView =
-            GalleryView(layoutInflater, null)
+        mGalleryGridView = GalleryGridView(layoutInflater, container)
         mGalleryUseCase = GalleryUseCase(GallerySDK())
 
         mGalleryViewModel = ViewModelProvider(this).get(GalleryViewModel::class.java)
 
-        setContentView(mGalleryView.getRootView())
+        return mGalleryGridView.getRootView()
     }
+
 
     override fun onStart() {
         super.onStart()
 
         mGalleryUseCase.registerListener(this)
-        mGalleryView.registerListener(this)
+        mGalleryGridView.registerListener(this)
 
         if (isGalleryCached()) {
-            mGalleryView.bindPictures(mGalleryViewModel.mPicturesList)
+            mGalleryGridView.bindPictures(mGalleryViewModel.mPicturesList)
         } else {
-            mGalleryView.showProgressIndicator()
+            mGalleryGridView.showProgressIndicator()
             mGalleryUseCase.fetchGalleryDataAndNotify()
         }
     }
@@ -44,25 +51,26 @@ class GalleryGridActivity : AppCompatActivity(), GalleryView.Listener,
     override fun onStop() {
         super.onStop()
 
-        mGalleryView.unregisterListener(this)
+        mGalleryGridView.unregisterListener(this)
         mGalleryUseCase.unregisterListener(this)
     }
 
     override fun onPictureClicked(picture: Picture) {
-        Toast.makeText(applicationContext, "You clicked ${picture.authorName}", Toast.LENGTH_LONG)
+        Toast.makeText(context, "You clicked ${picture.authorName}", Toast.LENGTH_LONG)
             .show()
+        view?.findNavController()?.navigate(GalleryGridFragmentDirections.gotoGalleryDetails(picture.authorId, picture.authorName))
     }
 
     override fun onGalleryDataFetched(pictureList: MutableList<Picture>) {
         cacheGalleryData(pictureList)
 
-        mGalleryView.bindPictures(mGalleryViewModel.mPicturesList)
-        mGalleryView.hideProgressIndicator()
+        mGalleryGridView.bindPictures(mGalleryViewModel.mPicturesList)
+        mGalleryGridView.hideProgressIndicator()
     }
 
     override fun onGalleryFetchFailed() {
-        Toast.makeText(applicationContext, "Could not load data", Toast.LENGTH_SHORT).show()
-        mGalleryView.hideProgressIndicator()
+        Toast.makeText(context, "Could not load data", Toast.LENGTH_SHORT).show()
+        mGalleryGridView.hideProgressIndicator()
     }
 
     private fun cacheGalleryData(pictureList: MutableList<Picture>) {

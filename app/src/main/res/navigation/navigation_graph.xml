@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/galleryGridFragment">
+
+    <fragment
+        android:id="@+id/galleryDetailsFragment"
+        android:name="com.kai.kotlinmvp.gallery.view.gallerydetails.GalleryDetailsFragment"
+        android:label=""
+        tools:layout="@layout/layout_gallery_details">
+        <argument
+            android:name="pictureId"
+            app:argType="integer" />
+        <argument
+            android:name="authorName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/galleryGridFragment"
+        android:name="com.kai.kotlinmvp.gallery.view.gallerygrid.GalleryGridFragment"
+        android:label="Gallery">
+        <action
+            android:id="@+id/gotoGalleryDetails"
+            app:destination="@id/galleryDetailsFragment" />
+    </fragment>
+</navigation>

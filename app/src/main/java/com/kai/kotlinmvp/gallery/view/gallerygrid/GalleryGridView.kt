@@ -1,40 +1,39 @@
-package com.kai.kotlinmvp.view.gallerygrid
+package com.kai.kotlinmvp.gallery.view.gallerygrid
 
 import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.kai.kotlinmvp.R
 import com.kai.kotlinmvp.base.BasePassiveView
 import com.kai.kotlinmvp.gallery.model.Picture
+import kotlinx.android.synthetic.main.layout_gallery.view.recyclerView
+import kotlinx.android.synthetic.main.layout_gallery.view.progressBar
 
 private const val VERTICAL_SPAN_COUNT = 2
 private const val HORIZONTAL_SPAN_COUNT = 5
 
-class GalleryView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
-    BasePassiveView<GalleryView.Listener>() {
+class GalleryGridView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
+    BasePassiveView<GalleryGridView.Listener>() {
 
     interface Listener {
         fun onPictureClicked(picture: Picture)
     }
 
-    private val mProgressBar: ProgressBar
-    private val mRecyclerView: RecyclerView
+    private val view = layoutInflater.inflate(R.layout.layout_gallery, parent, false)
 
     init {
-        setRootView(layoutInflater.inflate(R.layout.layout_gallery, parent, false))
 
-        mProgressBar = findViewById(R.id.progressBar)
-        mRecyclerView = findViewById(R.id.recyclerView)
+        setRootView(view)
 
-        mRecyclerView.layoutManager =
-            GridLayoutManager(getContext(), getSpanCount(), LinearLayoutManager.VERTICAL, false)
+        view.recyclerView.layoutManager = GridLayoutManager(
+            getContext(),
+            getSpanCount(),
+            LinearLayoutManager.VERTICAL, false)
 
-        mRecyclerView.setHasFixedSize(true)
+        view.recyclerView.setHasFixedSize(true)
     }
 
     private fun getSpanCount(): Int {
@@ -45,19 +44,19 @@ class GalleryView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
     }
 
     fun hideProgressIndicator() {
-        mProgressBar.visibility = View.GONE
+        view.progressBar.visibility = View.GONE
     }
 
     fun showProgressIndicator() {
-        mProgressBar.visibility = View.VISIBLE
+        view.progressBar.visibility = View.VISIBLE
     }
 
     fun bindPictures(pictureList: MutableList<Picture>) {
-        mRecyclerView.adapter =
-            AuthorListAdapter(
+        view.recyclerView.adapter =
+            GalleryGridAdapter(
                 pictureList,
                 object :
-                    AuthorListAdapter.OnItemClickListener {
+                    GalleryGridAdapter.OnItemClickListener {
                     override fun onItemClicked(pictureItem: Picture) {
 
                         for (listener in getListeners())
