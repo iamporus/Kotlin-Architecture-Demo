@@ -1,14 +1,14 @@
-package com.kai.kotlinmvp.presenter
+package com.kai.kotlinmvp.gallery
 
-import com.kai.kotlinmvp.model.Picture
-import com.kai.kotlinmvp.model.PictureSDK
+import com.kai.kotlinmvp.gallery.model.Picture
+import com.kai.kotlinmvp.gallery.model.GallerySDK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GalleryPresenter()
+class GalleryUseCase(private val mGallerySDK: GallerySDK)
 {
     interface OnGalleryFetchedListener {
 
@@ -29,7 +29,7 @@ class GalleryPresenter()
     fun fetchGalleryDataAndNotify()
     {
         CoroutineScope(IO).launch {
-            val pictureList = PictureSDK().getPictureList()
+            val pictureList = mGallerySDK.getPictureList()
 
             withContext(Main){
                 onResultReceived( pictureList )

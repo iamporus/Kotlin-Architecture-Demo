@@ -1,24 +1,26 @@
-package com.kai.kotlinmvp.view
+package com.kai.kotlinmvp.view.gallerygrid
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import com.kai.kotlinmvp.model.Picture
-import com.kai.kotlinmvp.presenter.GalleryPresenter
+import com.kai.kotlinmvp.gallery.model.Picture
+import com.kai.kotlinmvp.gallery.model.GallerySDK
+import com.kai.kotlinmvp.gallery.GalleryUseCase
 
-class MainActivity : AppCompatActivity(), GalleryView.Listener,
-    GalleryPresenter.OnGalleryFetchedListener {
+class GalleryGridActivity : AppCompatActivity(), GalleryView.Listener,
+    GalleryUseCase.OnGalleryFetchedListener {
 
     private lateinit var mGalleryView: GalleryView
     private lateinit var mGalleryViewModel: GalleryViewModel
-    private lateinit var mGalleryPresenter: GalleryPresenter
+    private lateinit var mGalleryUseCase: GalleryUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mGalleryView = GalleryView(layoutInflater, null)
-        mGalleryPresenter = GalleryPresenter()
+        mGalleryView =
+            GalleryView(layoutInflater, null)
+        mGalleryUseCase = GalleryUseCase(GallerySDK())
 
         mGalleryViewModel = ViewModelProviders.of(this).get(GalleryViewModel::class.java)
 
@@ -28,14 +30,14 @@ class MainActivity : AppCompatActivity(), GalleryView.Listener,
     override fun onStart() {
         super.onStart()
 
-        mGalleryPresenter.registerListener(this)
+        mGalleryUseCase.registerListener(this)
         mGalleryView.registerListener(this)
 
         if (isGalleryCached()) {
             mGalleryView.bindPictures(mGalleryViewModel.mPicturesList)
         } else {
             mGalleryView.showProgressIndicator()
-            mGalleryPresenter.fetchGalleryDataAndNotify()
+            mGalleryUseCase.fetchGalleryDataAndNotify()
         }
     }
 
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity(), GalleryView.Listener,
         super.onStop()
 
         mGalleryView.unregisterListener(this)
-        mGalleryPresenter.unregisterListener(this)
+        mGalleryUseCase.unregisterListener(this)
     }
 
     override fun onPictureClicked(picture: Picture) {

@@ -1,9 +1,9 @@
-package com.kai.kotlinmvp.model
+package com.kai.kotlinmvp.gallery.model
 
 import com.kai.kotlinmvp.helper.NetworkHelper
 import org.json.JSONArray
 
-class PictureSDK
+class GallerySDK
 {
     fun getPictureList(): MutableList<Picture>
     {
@@ -19,7 +19,8 @@ class PictureSDK
             val authorData = jsonArray.getJSONObject( i )
             val authorId = authorData.getInt("id")
             val authorName = authorData.getString( "author" )
-            val author = Picture(authorId, authorName)
+            val author =
+                Picture(authorId, authorName)
             list.add( author )
         }
         return list

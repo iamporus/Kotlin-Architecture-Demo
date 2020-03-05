@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp.view
+package com.kai.kotlinmvp.view.gallerygrid
 
 import android.content.res.Configuration
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kai.kotlinmvp.R
 import com.kai.kotlinmvp.base.BasePassiveView
-import com.kai.kotlinmvp.model.Picture
+import com.kai.kotlinmvp.gallery.model.Picture
 
 private const val VERTICAL_SPAN_COUNT = 2
 private const val HORIZONTAL_SPAN_COUNT = 5
@@ -54,13 +54,16 @@ class GalleryView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
 
     fun bindPictures(pictureList: MutableList<Picture>) {
         mRecyclerView.adapter =
-            AuthorListAdapter(pictureList, object : AuthorListAdapter.OnItemClickListener {
-                override fun onItemClicked(pictureItem: Picture) {
+            AuthorListAdapter(
+                pictureList,
+                object :
+                    AuthorListAdapter.OnItemClickListener {
+                    override fun onItemClicked(pictureItem: Picture) {
 
-                    for (listener in getListeners())
-                        listener.onPictureClicked(pictureItem)
-                }
+                        for (listener in getListeners())
+                            listener.onPictureClicked(pictureItem)
+                    }
 
-            })
+                })
     }
 }
