@@ -3,10 +3,10 @@ package com.kai.kotlinmvp.view.gallerygrid
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
-import com.kai.kotlinmvp.gallery.model.Picture
-import com.kai.kotlinmvp.gallery.model.GallerySDK
+import androidx.lifecycle.ViewModelProvider
 import com.kai.kotlinmvp.gallery.GalleryUseCase
+import com.kai.kotlinmvp.gallery.model.GallerySDK
+import com.kai.kotlinmvp.gallery.model.Picture
 
 class GalleryGridActivity : AppCompatActivity(), GalleryView.Listener,
     GalleryUseCase.OnGalleryFetchedListener {
@@ -22,7 +22,7 @@ class GalleryGridActivity : AppCompatActivity(), GalleryView.Listener,
             GalleryView(layoutInflater, null)
         mGalleryUseCase = GalleryUseCase(GallerySDK())
 
-        mGalleryViewModel = ViewModelProviders.of(this).get(GalleryViewModel::class.java)
+        mGalleryViewModel = ViewModelProvider(this).get(GalleryViewModel::class.java)
 
         setContentView(mGalleryView.getRootView())
     }
