@@ -1,7 +1,5 @@
 package com.kai.kotlinmvp.base
 
-import java.util.*
-
 /**
  * This is an observable extension of BaseView which allows any controller/presenter to
  * observe events from the view.
@@ -10,17 +8,16 @@ import java.util.*
  */
 open class BasePassiveView<Listener> : BaseView() {
 
-    private val mListeners = mutableSetOf<Listener>()
+    private val _mListeners = mutableSetOf<Listener>()
+    val mListeners: Set<Listener>
+        get() = _mListeners
 
     fun registerListener(listener: Listener) {
-        mListeners.add(listener)
+        _mListeners.add(listener)
     }
 
     fun unregisterListener(listener: Listener) {
-        mListeners.remove(listener)
+        _mListeners.remove(listener)
     }
 
-    fun getListeners(): Set<Listener> {
-        return Collections.unmodifiableSet(mListeners)
-    }
 }

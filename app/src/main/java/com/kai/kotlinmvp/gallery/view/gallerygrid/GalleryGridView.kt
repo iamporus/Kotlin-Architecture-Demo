@@ -59,7 +59,7 @@ class GalleryGridView(layoutInflater: LayoutInflater, parent: ViewGroup?) :
                     GalleryGridAdapter.OnItemClickListener {
                     override fun onItemClicked(pictureItem: Picture) {
 
-                        for (listener in getListeners())
+                        for (listener in mListeners)
                             listener.onPictureClicked(pictureItem)
                     }
 
