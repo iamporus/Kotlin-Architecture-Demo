@@ -1,18 +1,23 @@
-package com.kai.kotlinmvp.gallery.view.grid
+package com.kai.picsgallery.gallery.view.grid
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kai.kotlinmvp.R
-import com.kai.kotlinmvp.gallery.model.Picture
+import com.kai.picsgallery.R
+import com.kai.picsgallery.gallery.model.Picture
 import kotlinx.android.synthetic.main.layout_grid_item_picture.view.*
 
 class GalleryGridAdapter(
-    private val mPictureList: List<Picture>,
     private val mListener: OnItemClickListener
 ) : RecyclerView.Adapter<GalleryGridAdapter.GalleryViewHolder>() {
+
+    var mPictureList = mutableListOf<Picture>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     interface OnItemClickListener {
         fun onItemClicked(pictureItem: Picture)
@@ -21,9 +26,7 @@ class GalleryGridAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_grid_item_picture, parent, false)
-        return GalleryViewHolder(
-            view
-        )
+        return GalleryViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
@@ -35,6 +38,7 @@ class GalleryGridAdapter(
     }
 
     class GalleryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         fun bind(pictureItem: Picture, listener: OnItemClickListener) = with(itemView)
         {
             textView.text = pictureItem.authorName

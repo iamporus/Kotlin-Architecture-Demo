@@ -1,6 +1,6 @@
-package com.kai.kotlinmvp.gallery.model
+package com.kai.picsgallery.gallery.model
 
-import com.kai.kotlinmvp.helper.NetworkHelper
+import com.kai.picsgallery.helper.NetworkHelper
 import org.json.JSONArray
 
 class GallerySDK

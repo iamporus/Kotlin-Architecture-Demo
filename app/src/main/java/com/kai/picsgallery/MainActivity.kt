@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp
+package com.kai.picsgallery
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

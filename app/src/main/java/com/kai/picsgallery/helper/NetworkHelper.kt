@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp.helper
+package com.kai.picsgallery.helper
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

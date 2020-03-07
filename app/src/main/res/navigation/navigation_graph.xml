@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/galleryDetailsFragment"
-        android:name="com.kai.kotlinmvp.gallery.view.details.GalleryDetailsFragment"
+        android:name="com.kai.picsgallery.gallery.view.details.GalleryDetailsFragment"
         android:label=""
-        tools:layout="@layout/layout_gallery_details">
+        tools:layout="@layout/fragment_gallery_details">
         <argument
             android:name="pictureId"
             app:argType="integer" />
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/galleryGridFragment"
-        android:name="com.kai.kotlinmvp.gallery.view.grid.GalleryGridFragment"
+        android:name="com.kai.picsgallery.gallery.view.grid.GalleryGridFragment"
         android:label="Gallery">
         <action
             android:id="@+id/gotoGalleryDetails"

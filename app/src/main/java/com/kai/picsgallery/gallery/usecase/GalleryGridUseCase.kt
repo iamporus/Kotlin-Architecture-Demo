@@ -1,7 +1,7 @@
-package com.kai.kotlinmvp.gallery.usecase
+package com.kai.picsgallery.gallery.usecase
 
-import com.kai.kotlinmvp.gallery.model.Picture
-import com.kai.kotlinmvp.gallery.model.GallerySDK
+import com.kai.picsgallery.gallery.model.Picture
+import com.kai.picsgallery.gallery.model.GallerySDK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main

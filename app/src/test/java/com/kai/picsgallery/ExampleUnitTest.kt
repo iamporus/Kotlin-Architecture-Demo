@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp
+package com.kai.picsgallery
 
 import org.junit.Test
 
