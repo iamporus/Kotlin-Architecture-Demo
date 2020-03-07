@@ -1,12 +1,10 @@
-package com.kai.kotlinmvp.gallery.view.gallerydetails
+package com.kai.kotlinmvp.gallery.view.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.kai.kotlinmvp.R
 
 class GalleryDetailsFragment : Fragment() {
 

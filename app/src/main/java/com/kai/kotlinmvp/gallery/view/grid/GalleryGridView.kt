@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp.gallery.view.gallerygrid
+package com.kai.kotlinmvp.gallery.view.grid
 
 import android.content.res.Configuration
 import android.view.LayoutInflater

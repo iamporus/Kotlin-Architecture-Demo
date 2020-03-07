@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp.gallery
+package com.kai.kotlinmvp.gallery.usecase
 
 import com.kai.kotlinmvp.gallery.model.Picture
 import com.kai.kotlinmvp.gallery.model.GallerySDK
@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GalleryUseCase(private val mGallerySDK: GallerySDK) {
+class GalleryGridUseCase(private val mGallerySDK: GallerySDK) {
 
     interface OnGalleryFetchedListener {
         fun onGalleryDataFetched(pictureList: MutableList<Picture>)

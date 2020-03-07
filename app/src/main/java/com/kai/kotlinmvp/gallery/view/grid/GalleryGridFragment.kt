@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp.gallery.view.gallerygrid
+package com.kai.kotlinmvp.gallery.view.grid
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,25 +8,31 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.kai.kotlinmvp.gallery.GalleryUseCase
+import com.kai.kotlinmvp.gallery.usecase.GalleryGridUseCase
 import com.kai.kotlinmvp.gallery.model.GallerySDK
 import com.kai.kotlinmvp.gallery.model.GalleryViewModel
 import com.kai.kotlinmvp.gallery.model.Picture
 
-class GalleryGridFragment : Fragment(), GalleryGridView.Listener,
-    GalleryUseCase.OnGalleryFetchedListener {
+class GalleryGridFragment : Fragment(),
+    GalleryGridView.Listener,
+    GalleryGridUseCase.OnGalleryFetchedListener {
 
     private lateinit var mGalleryGridView: GalleryGridView
     private lateinit var mGalleryViewModel: GalleryViewModel
-    private lateinit var mGalleryUseCase: GalleryUseCase
+    private lateinit var mGalleryGridUseCase: GalleryGridUseCase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        mGalleryGridView = GalleryGridView(layoutInflater, container)
-        mGalleryUseCase = GalleryUseCase(GallerySDK())
+        mGalleryGridView =
+            GalleryGridView(
+                layoutInflater,
+                container
+            )
+        mGalleryGridUseCase =
+            GalleryGridUseCase(GallerySDK())
 
         mGalleryViewModel = ViewModelProvider(this).get(GalleryViewModel::class.java)
 
@@ -42,7 +48,7 @@ class GalleryGridFragment : Fragment(), GalleryGridView.Listener,
             mGalleryGridView.bindPictures(mGalleryViewModel.mPicturesList)
         } else {
             mGalleryGridView.showProgressIndicator()
-            mGalleryUseCase.fetchGalleryPicturesAsync(this)
+            mGalleryGridUseCase.fetchGalleryPicturesAsync(this)
         }
     }
 
@@ -55,7 +61,12 @@ class GalleryGridFragment : Fragment(), GalleryGridView.Listener,
     override fun onPictureClicked(picture: Picture) {
         Toast.makeText(context, "You clicked ${picture.authorName}", Toast.LENGTH_LONG)
             .show()
-        view?.findNavController()?.navigate(GalleryGridFragmentDirections.gotoGalleryDetails(picture.authorId, picture.authorName))
+        view?.findNavController()?.navigate(
+            GalleryGridFragmentDirections.gotoGalleryDetails(
+                picture.authorId,
+                picture.authorName
+            )
+        )
     }
 
     override fun onGalleryDataFetched(pictureList: MutableList<Picture>) {

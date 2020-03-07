@@ -1,4 +1,4 @@
-package com.kai.kotlinmvp.gallery.view.gallerydetails
+package com.kai.kotlinmvp.gallery.view.details
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
