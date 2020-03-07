@@ -71,7 +71,7 @@ class GalleryGridFragment : Fragment(),
         }
 
         mGalleryViewModel.mPicturesList.observe(viewLifecycleOwner) { pictureList ->
-            adapter.mPictureList = pictureList
+            adapter.submitList(pictureList)
         }
 
         mGalleryViewModel.bFetchFailed.observe(viewLifecycleOwner) { fetchFailed ->
