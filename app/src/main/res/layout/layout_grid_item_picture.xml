@@ -8,6 +8,9 @@
         <variable
             name="picture"
             type="com.kai.picsgallery.gallery.model.Picture" />
+        <variable
+            name="onItemClickListener"
+            type="com.kai.picsgallery.gallery.view.grid.GalleryGridAdapter.OnItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -16,7 +19,8 @@
         app:cardCornerRadius="3dp"
         app:cardElevation="1dp"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:onClick="@{ () -> onItemClickListener.onItemClicked(picture)}">
 
         <LinearLayout
             android:layout_width="match_parent"

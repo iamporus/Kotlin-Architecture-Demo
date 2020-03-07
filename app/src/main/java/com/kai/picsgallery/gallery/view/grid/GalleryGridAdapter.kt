@@ -14,6 +14,7 @@ class GalleryGridAdapter(
     private val mListener: OnItemClickListener
 ) : ListAdapter<Picture, GalleryGridAdapter.GalleryViewHolder>(PictureDiffUtilCallback()) {
 
+
     interface OnItemClickListener {
         fun onItemClicked(pictureItem: Picture)
     }
@@ -32,12 +33,8 @@ class GalleryGridAdapter(
         fun bind(pictureItem: Picture, listener: OnItemClickListener) = with(itemView)
         {
             binding.picture = pictureItem
+            binding.onItemClickListener = listener
             binding.executePendingBindings()
-
-            itemView.setOnClickListener {
-
-                listener.onItemClicked(pictureItem)
-            }
         }
 
         companion object {

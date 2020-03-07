@@ -19,6 +19,9 @@ class GalleryViewModel : ViewModel(), GalleryGridUseCase.OnGalleryFetchedListene
     val bFetchFailed: LiveData<Boolean>
         get() = _bFetchFailed
 
+    private var _bNavigateToPictureDetails = MutableLiveData<Picture>()
+    val bNavigateToDetailsEvent: LiveData<Picture>
+        get() = _bNavigateToPictureDetails
 
     init {
         _bIsFetching.value = true
@@ -40,6 +43,14 @@ class GalleryViewModel : ViewModel(), GalleryGridUseCase.OnGalleryFetchedListene
     override fun onCleared() {
         super.onCleared()
         mPicturesList.value?.clear()
+    }
+
+    fun onPictureClicked(pictureItem: Picture) {
+        _bNavigateToPictureDetails.value = pictureItem
+    }
+
+    fun onNavigatedToPictureDetails() {
+        _bNavigateToPictureDetails.value = null
     }
 
 }
