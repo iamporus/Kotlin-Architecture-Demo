@@ -33,18 +33,16 @@ class GalleryGridFragment : Fragment(), GalleryGridView.Listener,
         return mGalleryGridView.getRootView()
     }
 
-
     override fun onStart() {
         super.onStart()
 
-        mGalleryUseCase.registerListener(this)
         mGalleryGridView.registerListener(this)
 
         if (isGalleryCached()) {
             mGalleryGridView.bindPictures(mGalleryViewModel.mPicturesList)
         } else {
             mGalleryGridView.showProgressIndicator()
-            mGalleryUseCase.fetchGalleryDataAndNotify()
+            mGalleryUseCase.fetchGalleryPicturesAsync(this)
         }
     }
 
@@ -52,7 +50,6 @@ class GalleryGridFragment : Fragment(), GalleryGridView.Listener,
         super.onStop()
 
         mGalleryGridView.unregisterListener(this)
-        mGalleryUseCase.unregisterListener(this)
     }
 
     override fun onPictureClicked(picture: Picture) {
