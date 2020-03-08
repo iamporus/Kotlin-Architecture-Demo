@@ -1,3 +1,8 @@
 package com.kai.picsgallery.gallery.model
 
-data class Picture(val authorId: Int, val authorName: String )
+import com.squareup.moshi.Json
+
+data class Picture(
+    @Json(name = "id") val authorId: Int,
+    @Json(name = "author") val authorName: String
+)

@@ -3,13 +3,12 @@ package com.kai.picsgallery.gallery
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kai.picsgallery.gallery.model.GallerySDK
 import com.kai.picsgallery.gallery.model.Picture
 import com.kai.picsgallery.gallery.usecase.GalleryGridUseCase
 
 class GalleryViewModel : ViewModel(), GalleryGridUseCase.OnGalleryFetchedListener {
 
-    var mPicturesList = MutableLiveData<MutableList<Picture>>()
+    var mPicturesList = MutableLiveData<List<Picture>>()
 
     private var _bIsFetching = MutableLiveData<Boolean>()
     val bIsFetching: LiveData<Boolean>
@@ -26,10 +25,10 @@ class GalleryViewModel : ViewModel(), GalleryGridUseCase.OnGalleryFetchedListene
     init {
         _bIsFetching.value = true
         _bFetchFailed.value = false
-        GalleryGridUseCase(GallerySDK()).fetchGalleryPicturesAsync(this)
+        GalleryGridUseCase().fetchGalleryPicturesAsync(this)
     }
 
-    override fun onGalleryDataFetched(pictureList: MutableList<Picture>) {
+    override fun onGalleryDataFetched(pictureList: List<Picture>) {
 
         mPicturesList.value = pictureList
         _bIsFetching.value = false
@@ -38,11 +37,6 @@ class GalleryViewModel : ViewModel(), GalleryGridUseCase.OnGalleryFetchedListene
     override fun onGalleryFetchFailed() {
         _bIsFetching.value = false
         _bFetchFailed.value = true
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        mPicturesList.value?.clear()
     }
 
     fun onPictureClicked(pictureItem: Picture) {

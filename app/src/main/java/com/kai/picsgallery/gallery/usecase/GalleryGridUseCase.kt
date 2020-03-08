@@ -1,40 +1,33 @@
 package com.kai.picsgallery.gallery.usecase
 
 import com.kai.picsgallery.gallery.model.Picture
-import com.kai.picsgallery.gallery.model.GallerySDK
+import com.kai.picsgallery.network.PictureGalleryApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GalleryGridUseCase(private val mGallerySDK: GallerySDK) {
+class GalleryGridUseCase() {
 
     interface OnGalleryFetchedListener {
-        fun onGalleryDataFetched(pictureList: MutableList<Picture>)
+        fun onGalleryDataFetched(pictureList: List<Picture>)
         fun onGalleryFetchFailed()
     }
 
     fun fetchGalleryPicturesAsync(listener: OnGalleryFetchedListener) {
 
         CoroutineScope(IO).launch {
-            val pictureList = mGallerySDK.getPictureList()
 
-            withContext(Main) {
-                onResultReceived(pictureList, listener)
+            val pictureListDeferred = PictureGalleryApi.pictureGalleryService.getGalleryPictures()
+            try {
+                val picturesList = pictureListDeferred.await()
+                withContext(Main) {
+                    listener.onGalleryDataFetched(picturesList)
+                }
+            } catch (e: Exception) {
+                listener.onGalleryFetchFailed()
             }
-        }
-    }
-
-    private fun onResultReceived(
-        pictureList: MutableList<Picture>,
-        listener: OnGalleryFetchedListener
-    ) {
-
-        if (pictureList.size > 0) {
-            listener.onGalleryDataFetched(pictureList)
-        } else {
-            listener.onGalleryFetchFailed()
         }
     }
 
