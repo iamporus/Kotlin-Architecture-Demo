@@ -1,4 +1,4 @@
-package com.kai.picsgallery.gallery
+package com.kai.picsgallery.gallery.view.grid
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

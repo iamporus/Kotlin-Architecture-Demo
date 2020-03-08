@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kai.picsgallery.R
 import com.kai.picsgallery.databinding.FragmentGalleryGridBinding
-import com.kai.picsgallery.gallery.GalleryViewModel
 import com.kai.picsgallery.gallery.model.Picture
 
 private const val VERTICAL_SPAN_COUNT = 2
@@ -46,11 +45,6 @@ class GalleryGridFragment : Fragment(), GalleryGridAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     private fun initRecyclerView() {
